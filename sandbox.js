@@ -1,3 +1,6 @@
+const redux = require("redux");
+const createStore = redux.createStore;
+
 // String constant indecating the type of action.
 const BUY_CAKE = "BUY_CAKE";
 
@@ -16,7 +19,7 @@ function buyCake() {
 // (previousState, action) => newState
 
 const initialState = {
-  numberOfCakes: 10,
+  numOfCakes: 10,
 };
 
 const reducer = (state = initialState, action) => {
@@ -24,9 +27,25 @@ const reducer = (state = initialState, action) => {
     case BUY_CAKE:
       return {
         ...state, // Creating a copy of the state. This won't affect the other properties if any.
-        numOfCakes: state.numberOfCakes - 1,
+        numOfCakes: state.numOfCakes - 1,
       };
     default:
       return state;
   }
 };
+
+/* 
+Redux Store 
+    -> Holds application state
+    -> Allows access to state via getState()
+    -> Allows state to be updated via dispatch(action)
+    -> Registers listeners via subscribe(listener)
+    -> Handles unregistering of listeners via the function returned by subscribe(listener)
+*/
+const store = createStore(reducer);
+console.log("Initial state: ", store.getState());
+const unsubscribe = store.subscribe(() => console.log("Updated state: ", store.getState()));
+store.dispatch(buyCake());
+store.dispatch(buyCake());
+store.dispatch(buyCake());
+unsubscribe();
